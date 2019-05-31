@@ -1,0 +1,14 @@
+k
+Chain f2b-sshd-perma (1 references)
+target     prot opt source               destination         
+REJECT     all  --  167.99.77.94         0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  144.217.161.78       0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  176.78.137.119       0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  68.183.181.7         0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  54.37.232.137        0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  222.187.221.72       0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  164.132.225.151      0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  91.215.128.131       0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  61.147.247.146       0.0.0.0/0            reject-with icmp-port-unreachable
+REJECT     all  --  5.135.152.97         0.0.0.0/0            reject-with icmp-port-unreachable
+RETURN     all  --  0.0.0.0/0            0.0.0.0/0 
