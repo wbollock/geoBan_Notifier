@@ -77,6 +77,33 @@ fi
 
 done
 
-echo "There are $tally number of Tally IPs banned"
+clear
 
 
+# this outputs this to the end of motd.tail 
+#There is/are 1 Tally IP(s) banned
+#Last login: Tue Jun  4 15:48:50 2019 from 10.136.101.100
+
+sudo echo "There is/are $tally Tally IP(s) banned" > /etc/motd.tail
+
+echo "geo.sh completed. Check MOTD."
+#TODO:
+#put "1" in the MOTD with a color
+
+# maybe just add the script to be called in 10-help-text
+# want bash script to return a number though
+# clear will fuck it up
+# sudo nano /etc/update-motd.d/00-header 
+
+#dynamic motd
+
+#now can sudo nano /etc/motd.tail
+#https://oitibs.com/ubuntu-16-04-dynamic-motd/
+#$(sudo bash /home/cci_admin2/geo.sh)
+
+
+#*https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
+#NOW just need to run geo.sh as a service every once in a while
+
+#https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
+# this works. just need to clean up the script, and have systemd run every once in a while.
