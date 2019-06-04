@@ -107,3 +107,7 @@ echo "geo.sh completed. Check MOTD."
 
 #https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
 # this works. just need to clean up the script, and have systemd run every once in a while.
+# copy /etc/systemd/system/geo.service and geo.timer
+
+#only drawback is that syslog flooded with geo output. w/e
+# also need to make setup script. one script to run to setup all this
