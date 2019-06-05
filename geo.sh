@@ -36,26 +36,23 @@ declare -a delete=(0.0.0.0)
 for target in "${delete[@]}"; do
     for i in "${!ip[@]}"; do
       if [[ ${ip[i]} = "${delete[0]}" ]]; then
-      unset 'ip[i]'
+      unset "ip[i]"
     fi
   done
 done
 
 echo "Now showing formatted IP array"
 
-ip+=('128.186.72.12')
+#debug to check if one IP shows up
+
+ip+=("128.186.72.12")
 
 echo Data: "${ip[@]}"
 
   # this array will hold the geo lookup data in it
   # iterate through array
-  : '
-  for ((i=0; i<${#ip[@]}; i++))
-  do
-  ip_lookup=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[@]}));
-  done
-  '
-  #didn't use this option
+ 
+
 
 #############################################################
 # need data
@@ -76,7 +73,7 @@ for (( i=0,j=0; i<${#ip[@]}+20; i++,j=j+2 )); do
 
   if geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]} | grep -q "Tallahassee"
   # quiet grep, -q
-  then tally=$((tally+1)) #TODO: add array of IP's here. Print them to MOTD.
+  then tally=$((tally+1)) #TODO: add array of IPs here. Print them to MOTD.
   # if CITY = XX, THEN ADD TO COUNTER
   fi
 done
@@ -88,26 +85,12 @@ clear
 #There is/are 1 Tally IP(s) banned
 #Last login: Tue Jun  4 15:48:50 2019 from 10.136.101.100
 
-sudo echo "There is/are $tally Tally IP(s) banned" > /etc/motd.tail
+sudo echo "There is/are $tally Tallahassee IP(s) banned" > /etc/motd.tail
 
 echo "geo.sh completed. Check MOTD."
-#TODO:
-#put "1" in the MOTD with a color
 
-# invoke seperate script, starting from here, to do everything else
-# start this script once and put the rest into a service, above
-# copy /etc/systemd/system/geo.service and geo.timer
 
-# create service
-#*https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
-#NOW just need to run geo.sh as a service every once in a while
-#only drawback is that syslog flooded with geo output. w/e
 
-# install essential components
-# now can sudo nano /etc/motd.tail
-#https://oitibs.com/ubuntu-16-04-dynamic-motd/
-
-# set service enabled and repeating
 
 
 
