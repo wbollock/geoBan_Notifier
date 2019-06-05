@@ -30,3 +30,7 @@ https://www.miyuru.lk/geoiplegacy to make .dat; user must get this and match pat
     
     /usr/share/GeoIP/maxmind4.dat
 
+# Results
+Here is an example image of what your new MOTD will look like:
+![MOTD](img/ss1.png)
+
