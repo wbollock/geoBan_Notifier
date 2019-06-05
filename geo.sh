@@ -1,17 +1,29 @@
 #!/bin/bash
-# MADE BY WILL BOLLOCK
-# This script will check iptables f2b-perma-sshd, or whatever is set in config
-# emails user in geo location matches specifed (e.g Tallahassee for FSU)
+#############################################################
+#
+#	Script Name:	geo.sh
+#	Author: Will Bollock
+#	Date: 06/04/18
+#	Version: 1.0
+#	
+#	Purpose: This script, in combination with mindmap4.dat, will
+# allow the user to scan their fail2ban "f2b-sshd-perma" filter
+# and check banned IPs against a set city. If found, it will 
+# add the amount of banned IPs to the MOTD
+#############################################################
+
 
 # first task is to grep iptables and get a list of readable IPs
-# sudo iptables -L INPUT -v -n 
-#regex would be good for this
+# regex would be good for this
+
 # sudo iptables -L INPUT -n  | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"
-#input=$(sudo iptables -L f2b-sshd-perma -n  | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}")
+
 declare -a ip=($(sudo iptables -L f2b-sshd-perma -n  | grep -E -o "([0-9]{1,3}[\.]){3}[0-9]{1,3}"))
 #while read -r "$input" ; do
  #   field+=("$input")
 #done
+
+#debug
 echo Num items: ${#ip[@]}
 echo Data: "${ip[@]}"
 
@@ -35,46 +47,38 @@ ip+=('128.186.72.12')
 
 echo Data: "${ip[@]}"
 
+  # this array will hold the geo lookup data in it
+  # iterate through array
+  : '
+  for ((i=0; i<${#ip[@]}; i++))
+  do
+  ip_lookup=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[@]}));
+  done
+  '
+  #didn't use this option
+
+#############################################################
+# need data
+# wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+# ****ok - this works https://www.miyuru.lk/geoiplegacy to make .dat*****
+# user must get this and match path to /usr/share/GeoIP/maxmind4.dat
+#
+# declare -a geoArr=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]}))
+# could just grep each line
 # ip array formatted with all the ips
 # check to see where each IP comes from
-# if IP comes from Tallahasee, or even Florida, then do XXXX (email)
-# wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
-
-#ok - this works https://www.miyuru.lk/geoiplegacy
-# with this command
-# geoiplookup -f /usr/share/GeoIP/maxmind4.dat 173.170.13.116
-# need to grep through one of those to get the city
-# http://timmurphy.org/2012/03/09/convert-a-delimited-string-into-an-array-in-bash/
-
-# this array will hold the geo lookup data in it
-# iterate through array
-: '
-for ((i=0; i<${#ip[@]}; i++))
-do
-ip_lookup=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[@]}));
-done
-'
-
-# if CITY = XX, THEN ADD TO COUNTER
-#FOR TESTING: ADDING TALLAHASEE IP
-
-
-
+#############################################################
 
 # counter var
 tally=0
 for (( i=0,j=0; i<${#ip[@]}+20; i++,j=j+2 )); do
 
 
-#declare -a geoArr=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]}))
-# could just grep each line
-
-if geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]} | grep -q "Tallahassee"
-# quiet grep, -q
-then tally=$((tally+1))
-#found tallahassee
-fi
-
+  if geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]} | grep -q "Tallahassee"
+  # quiet grep, -q
+  then tally=$((tally+1)) #TODO: add array of IP's here. Print them to MOTD.
+  # if CITY = XX, THEN ADD TO COUNTER
+  fi
 done
 
 clear
@@ -90,24 +94,24 @@ echo "geo.sh completed. Check MOTD."
 #TODO:
 #put "1" in the MOTD with a color
 
-# maybe just add the script to be called in 10-help-text
-# want bash script to return a number though
-# clear will fuck it up
-# sudo nano /etc/update-motd.d/00-header 
-
-#dynamic motd
-
-#now can sudo nano /etc/motd.tail
-#https://oitibs.com/ubuntu-16-04-dynamic-motd/
-#$(sudo bash /home/cci_admin2/geo.sh)
-
-
-#*https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
-#NOW just need to run geo.sh as a service every once in a while
-
-#https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
-# this works. just need to clean up the script, and have systemd run every once in a while.
+# invoke seperate script, starting from here, to do everything else
+# start this script once and put the rest into a service, above
 # copy /etc/systemd/system/geo.service and geo.timer
 
+# create service
+#*https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
+#NOW just need to run geo.sh as a service every once in a while
 #only drawback is that syslog flooded with geo output. w/e
-# also need to make setup script. one script to run to setup all this
+
+# install essential components
+# now can sudo nano /etc/motd.tail
+#https://oitibs.com/ubuntu-16-04-dynamic-motd/
+
+# set service enabled and repeating
+
+
+
+
+
+
+
