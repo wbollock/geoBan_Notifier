@@ -234,6 +234,8 @@ sudo echo "There is/are $tally Tallahassee IP(s) banned" > /etc/motd.tail
 echo "geo.sh completed. Check MOTD."
 EOF
 
+sudo chmod +x /usr/bin/geo
+
 sudo echo "Enabling geo.service...."
 sudo systemctl daemon-reload
 sudo systemctl enable --now geo.service
