@@ -1,13 +1,32 @@
 # Geo IP Ban Notifier 
 ## Description
-This project is meant to take the result of fail2ban's repeat offender ban, do a geolocation lookup on these banned IP, and notify the sysadmin if a user has been banned in Tallahassee area, as they are likely a student. 
-
+This script, in combination with mindmap4.dat, will
+allow the user to scan their fail2ban "f2b-sshd-perma" filter
+and check banned IPs against a set city. If found, it will 
+add the amount of banned IPs to the MOTD. Preset for Tallahasse, FSU.
 ## As A Service
-*https://unix.stackexchange.com/questions/47695/how-to-write-startup-script-for-systemd#47715*
-I'll want to schedule the program to run, or have the script as a service
-The script should check all banned IP's location, and run email if found one
+
+This works as a systemd service, that restarts occasionally to re-populate the MOTD.
+
 
 ## Setup
-Need to install and configure geolocation iplookup (https://www.ostechnix.com/find-geolocation-ip-address-commandline/) and download the city repository from (http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz)
+Need to install and configure geolocation iplookup 
 
-More setup instructions available by request.
+    sudo pacman -S geoip
+    OR
+    sudo apt-get install geoip-bin
+
+    Example:
+    geoiplookup 80.60.233.195
+
+    Results in:
+    GeoIP Country Edition: NL, Netherlands
+
+
+Next, download the city repository from (http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz)
+
+    wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz 
+https://www.miyuru.lk/geoiplegacy to make .dat; user must get this and match path to 
+    
+    /usr/share/GeoIP/maxmind4.dat
+

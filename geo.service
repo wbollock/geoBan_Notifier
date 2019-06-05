@@ -1,0 +1,11 @@
+[Unit]
+Description=Run geo.sh and update MOTD
+
+[Service]
+ExecStart=/usr/bin/geo
+User=%I
+Restart=always
+RestartSec=1800s
+
+[Install]
+WantedBy=multi-user.target
