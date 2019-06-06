@@ -30,6 +30,14 @@ https://www.miyuru.lk/geoiplegacy to make .dat; user must get this and match pat
     
     /usr/share/GeoIP/maxmind4.dat
 
+Finally, run *setup.sh* in your terminal (can copy and paste all text):
+
+    sudo nano setup.sh
+    sudo chmod +x setup.sh
+    sudo bash setup.sh
+    .... after running ....
+    sudo systemctl restart geo.service
+
 # Results
 Here is an example image of what your new MOTD will look like:
 ![MOTD](img/ss1.png)
