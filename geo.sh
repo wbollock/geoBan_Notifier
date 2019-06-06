@@ -44,8 +44,7 @@ done
 echo "Now showing formatted IP array"
 
 #debug to check if one IP shows up
-
-ip+=("128.186.72.12")
+#ip+=("128.186.72.12")
 
 echo Data: "${ip[@]}"
 
@@ -58,7 +57,7 @@ echo Data: "${ip[@]}"
 # need data
 # wget http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
 # ****ok - this works https://www.miyuru.lk/geoiplegacy to make .dat*****
-# user must get this and match path to /usr/share/GeoIP/maxmind4.dat
+# user must get this and match path to remm/usr/share/GeoIP/maxmind4.dat
 #
 # declare -a geoArr=($(geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]}))
 # could just grep each line
@@ -71,7 +70,7 @@ tally=0
 for (( i=0,j=0; i<${#ip[@]}+20; i++,j=j+2 )); do
 
 
-  if geoiplookup -f /usr/share/GeoIP/maxmind4.dat ${ip[$i]} | grep -q "Tallahassee"
+  if geoiplookup -f /usr/share/GeoIP/maxmind4.dat "${ip[$i]}" | grep -q "Tallahassee"
   # quiet grep, -q
   then tally=$((tally+1)) #TODO: add array of IPs here. Print them to MOTD.
   # if CITY = XX, THEN ADD TO COUNTER
@@ -85,16 +84,20 @@ clear
 #There is/are 1 Tally IP(s) banned
 #Last login: Tue Jun  4 15:48:50 2019 from 10.136.101.100
 
-sudo echo "There is/are $tally Tallahassee IP(s) banned" > /etc/motd.tail
+
+
+#sorting based on $tally amount
+if [ $tally -lt 1 ]
+  then
+  echo "There are $tally Tallahassee IPs banned" > /etc/motd.tail
+fi
+if [ $tally -eq 1 ]
+  then
+  echo "There is $tally Tallahassee IP banned" > /etc/motd.tail
+fi
+if [ $tally -gt 1 ]
+then
+  echo "There are $tally Tallahassee IPs banned" > /etc/motd.tail
+fi
 
 echo "geo.sh completed. Check MOTD."
-
-
-
-
-
-
-
-
-
-
